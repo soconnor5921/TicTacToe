@@ -25,20 +25,12 @@ public class Runner
 
         while(gameOn)
         {
-            for(int i = 0; i < board.length; i++)
+            printBoard(board);
+
+            if(!validMovesExist(board))
             {
-                for(int j = 0; j < board[i].length; j++)
-                {
-                    if(board[i][j].isEmpty)
-                    {
-                        System.out.print("[ ]");
-                    }
-                    else
-                    {
-                        System.out.print("[" + board[i][j].letter + "]");
-                    }
-                }
-                System.out.println();
+                System.out.println("NO VALID MOVES REMAIN");
+                gameOff();
             }
 
             System.out.println(player.name.toUpperCase() + "'S TURN");
@@ -46,6 +38,13 @@ public class Runner
             String move = in.nextLine();
             if(validMove(move, board))
             {
+                System.out.println("THIS IS YOUR MOVE:");
+                printBoard(board);
+                if(!validMovesExist(board))
+                {
+                    System.out.println("NO VALID MOVES REMAIN");
+                    gameOff();
+                }
                 cpu.setMyTurn(true);
                 cpu.move(board);
                 System.out.println("COMPUTER'S HAS MOVED");
@@ -163,5 +162,44 @@ public class Runner
             default: break;
         }
         return true;
+    }
+
+    public static boolean validMovesExist(BoardSpace[][] board)
+    {
+        for(int i = 0; i < board.length; i++)
+        {
+            for(int j = 0; j < board[i].length; j++)
+            {
+                if(board[i][j].isEmpty)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void gameOff()
+    {
+        gameOn = false;
+    }
+
+    public static void printBoard(BoardSpace[][] board)
+    {
+        for(int i = 0; i < board.length; i++)
+        {
+            for(int j = 0; j < board[i].length; j++)
+            {
+                if(board[i][j].isEmpty)
+                {
+                    System.out.print("[ ]");
+                }
+                else
+                {
+                    System.out.print("[" + board[i][j].letter + "]");
+                }
+            }
+            System.out.println();
+        }
     }
 }
