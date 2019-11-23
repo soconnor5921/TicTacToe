@@ -12,7 +12,7 @@ public class Runner
         {
             for(int j = 0; j < board[i].length; j++)
             {
-                board[i][j] = new BoardSpace(true);
+                board[i][j] = new BoardSpace(true, "-");
             }
         }
 
@@ -27,12 +27,6 @@ public class Runner
         {
             printBoard(board);
 
-            if(!validMovesExist(board))
-            {
-                System.out.println("NO VALID MOVES REMAIN");
-                gameOff();
-            }
-
             System.out.println(player.name.toUpperCase() + "'S TURN");
             System.out.println("Use the number pad to indicate your move");
             String move = in.nextLine();
@@ -40,14 +34,28 @@ public class Runner
             {
                 System.out.println("THIS IS YOUR MOVE:");
                 printBoard(board);
-                if(!validMovesExist(board))
+                if(checkWin(board))
                 {
-                    System.out.println("NO VALID MOVES REMAIN");
+                    System.out.println(player.name.toUpperCase() + " HAS WON!");
                     gameOff();
                 }
-                cpu.setMyTurn(true);
-                cpu.move(board);
-                System.out.println("COMPUTER'S HAS MOVED");
+                else if(!validMovesExist(board))
+                {
+                    System.out.println("NO VALID MOVES EXIST, THE GAME IS A DRAW!");
+                    gameOff();
+                }
+                else
+                {
+                    cpu.setMyTurn(true);
+                    cpu.move(board);
+                    System.out.println("COMPUTER'S HAS MOVED");
+                    if(checkWin(board))
+                    {
+                        printBoard(board);
+                        System.out.println("THE COMPUTER HAS WON!");
+                        gameOff();
+                    }
+                }
             }
             else
             {
@@ -201,5 +209,48 @@ public class Runner
             }
             System.out.println();
         }
+    }
+
+    public static boolean checkWin(BoardSpace[][] board)
+    {
+        if(board[0][0].letter.equals(board[1][1].letter) && board[0][0].letter.equals(board[2][2].letter))
+        {
+            if(!board[0][0].letter.equals("-"))
+            {
+                return true;
+            }
+        }
+        else if(board[0][2].letter.equals(board[1][1].letter) && board[0][2].letter.equals(board[2][0].letter))
+        {
+            if(!board[0][2].letter.equals("-"))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            for(int i = 0; i < board.length; i++)
+            {
+                if(board[i][0].letter.equals(board[i][1].letter) && board[i][0].letter.equals(board[i][2].letter))
+                {
+                    if(!board[i][0].letter.equals("-"))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            for(int j = 0; j < board.length; j++)
+            {
+                if(board[0][j].letter.equals(board[1][j].letter) && board[0][j].letter.equals(board[2][j].letter))
+                {
+                    if(!board[0][j].letter.equals("-"))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
