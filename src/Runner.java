@@ -169,7 +169,7 @@ public class Runner
                 }
             default: break;
         }
-        return true;
+        return false;
     }
 
     public static boolean validMovesExist(BoardSpace[][] board)
